@@ -174,7 +174,7 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({ allUsers, user }
         }).then(async function (inst: any) {
           trackInst = inst;
           setInstance(inst);
-        
+
           // **** Getting Digital Signature Info ****
           const info = await inst.getSignaturesInfo();
           if(info.status === "valid" || info.status === "warning") digitallySigned = info;
@@ -196,10 +196,42 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({ allUsers, user }
           };
 
           // **** Handling Add Signature / Initial UI ****
+          // START - FILEINVITE CONSOLE LOGS
+          inst.addEventListener('document.saveStateChange', async (event: any) => {
+            if (event.hasUnsavedChanges && inst) {
+              console.log({
+                test: 'document.saveStateChange',
+                changes: event.hasUnsavedChanges,
+              });
+            }
+          });
+
+          inst.addEventListener("formFieldValues.update", (formFields: any) => {
+            if (formFields) {
+              const fields = formFields
+                  .map((formField: any) => {
+                    if (formField) {
+                      return {
+                        name: formField.name,
+                        value: formField['value']
+                      };
+                    }
+
+                    return formField;
+                  })
+                  .toArray();
+
+              console.log({
+                test: 'formFieldValues.update',
+                updatedFormFields: fields
+              });
+            }
+          });
+          // END - FILEINVITE CONSOLE LOGS
 
           // Track which signature form field was clicked on
           // and wether it was an initial field or not.
-          inst.addEventListener("annotations.press", 
+          inst.addEventListener("annotations.press",
             (event: any) => {
             let lastFormFieldClicked = event.annotation;
 
