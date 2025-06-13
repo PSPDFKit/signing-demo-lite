@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+/package-lock.json
 
 # testing
 /coverage
@@ -12,6 +13,7 @@
 
 #PSPDFKit libriaries 
 public/pspdfkit-lib/
+public/nutrient-viewer/
 
 # next.js
 /.next/
