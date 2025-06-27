@@ -1,6 +1,6 @@
 'use server'
 
-import { AIMessage } from "@/utils/types";
+import { AIMessage } from "../../src/types";
 
 const instructions = `you are an AI assistant on a PSPDFKit signing demo page, people will ask you questions about the code of the project which is
      posted below. It’s a Next.js project. If people ask you about anything else besides this signing demo, politely decline that you can’t answer.

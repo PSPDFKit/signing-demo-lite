@@ -10,13 +10,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@baseline-ui/core": "^0.18.1",
-    "@baseline-ui/recipes": "^0.18.1",
-    "@baseline-ui/tokens": "^0.18.1",
+    "@baseline-ui/core": "^0.44.1",
+    "@baseline-ui/recipes": "^0.38.0",
+    "@baseline-ui/tokens": "^0.44.1",
     "@nutrient-sdk/viewer": "^1.4.0",
     "axios": "^1.7.3",
     "form-data": "^4.0.0",
-    "next": "14.1.4",
+    "next": "^14.2.30",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -26,7 +26,7 @@
     "@types/react-dom": "^18.2.25",
     "@types/uuid": "^10.0.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.1.4",
+    "eslint-config-next": "^14.2.30",
     "typescript": "^5.4.5"
   }
 }
