@@ -62,7 +62,7 @@ export const getAnnotationRenderers = ({ annotation }: any) => {
     box.style.setProperty('--box-height', (annotation.boundingBox.height/16) + 'rem');
     box.id = annotation.id;
 
-    return { node: box, append: true };
+    return { node: box, append: true, noZoom: false };
   }
 
   if (annotation.name) {
@@ -76,6 +76,7 @@ export const getAnnotationRenderers = ({ annotation }: any) => {
         type: annotation.customData?.type,
       }),
       append: true,
+      noZoom: false
     };
 
     return renderConfigurations[annotation.id] || null;

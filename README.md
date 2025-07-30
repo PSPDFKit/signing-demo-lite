@@ -58,7 +58,7 @@ https://signing-demo-baseline-one.vercel.app/
 
 ### 1. PDF Viewer Setup
 
-Start by loading Nutrient Web SDK with signing capabilities:
+The Viewer enables users to load and display documents within the web application. In this step, we'll also customize the appearance of signature widgets and configure initial signature fields.
 
 ```javascript
 // Basic configuration for signing workflow
@@ -71,6 +71,7 @@ const config = {
   // Enable custom renderers for signature fields
   customRenderers: {
     Annotation: ({ annotation }) => {
+      // You can use annotation's customData property to determine if this is an initial, digital signature or just a normal signature and customise the UI accordingly
       return getCustomSignatureRenderer(annotation);
     }
   },
@@ -145,6 +146,7 @@ const instance = await Nutrient.load(config);
 ### 2. Creating Signature Fields
 
 #### Electronic Signature Fields
+Electronic signatures are annotations added directly onto the document. They can be hand-drawn, uploaded as an image, or typed using the signature creation modal.
 
 ```javascript
 async function createSignatureField(instance, Nutrient, options) {
@@ -177,6 +179,7 @@ async function createSignatureField(instance, Nutrient, options) {
 ```
 
 #### Digital Signature Fields
+Digital signatures are cryptographic signatures applied to documents to verify their authenticity and ensure their integrity. They're commonly used in legally binding contracts. In this step, we'll create a form field to place visible digital signatures on the document.
 
 ```javascript
 async function createDigitalSignatureField(instance, Nutrient, options) {
@@ -206,6 +209,7 @@ async function createDigitalSignatureField(instance, Nutrient, options) {
 ### 3. Implementing Drag & Drop
 
 #### HTML Structure for Draggable Fields
+In this step, we'll define the HTML structure for creating a side panel UI, which will contain draggable elements.
 
 ```html
 <div class="field-panel">
@@ -233,6 +237,7 @@ async function createDigitalSignatureField(instance, Nutrient, options) {
 ```
 
 #### JavaScript Drag & Drop Implementation
+In this step, we'll implement the logic to detect when form fields are dropped into the document viewer and dynamically create the corresponding form fields on the document.
 
 ```javascript
 function handleDragStart(event, fieldType) {
@@ -289,6 +294,7 @@ function setupDropHandler(instance) {
 - https://www.nutrient.io/guides/web/customizing-the-interface/observing-changes-with-events/
 
 ### 4. User Management & Permissions
+This implementation demonstrates user management with role-based permissions, where each user object contains identification data (id, name, email) and a role that determines their capabilities - such as creating signature fields or signing specific fields assigned to them.
 
 ```javascript
 class SigningWorkflow {
@@ -385,6 +391,7 @@ class SigningWorkflow {
 ### 5. Digital Signature Implementation
 
 #### Digital Signing
+This step demonstrates how to digitally sign PDF documents to ensure security and verify document integrity against tampering. This implementation uses Nutrient's API, which provides SOC 2-compliant digital signatures for integration into apps, websites, and platforms. The API enables easy signing, management, and validation of legally binding documents. Alternatively, you can use your own signing service with custom certificates through Nutrient Web SDK - relevant guides are provided in the section below.
 
 ```javascript
 async function applyDigitalSignature(instance) {
@@ -427,6 +434,7 @@ async function applyDigitalSignature(instance) {
 ```
 
 #### Certificate Validation Setup
+This configuration displays the validation status of digitally signed documents. The validation indicator appears only when a document contains digital signatures and shows their current verification status.
 
 ```javascript
 // Set signature validation display
@@ -440,49 +448,30 @@ await instance.setViewState(viewState =>
 #### Relevant Guides
 - https://www.nutrient.io/api/digital-signatures-api/
 - https://www.nutrient.io/guides/web/user-interface/signatures/validation-status/
+- https://www.nutrient.io/blog/how-to-add-a-digital-signature-to-pdf-using-laravel/#adding-a-digital-signature-to-a-pdf-using-nutrient
+- https://www.nutrient.io/guides/document-engine/signatures/signature-lifecycle/sign-a-pdf-document/#the-signing-service
+- https://www.nutrient.io/guides/web/signatures/digital-signatures/integrations/aws-hsm/#setting-up-the-signing-server
+- https://www.nutrient.io/blog/how-to-integrate-aws-cloudhsm-to-sign-documents/#producing-a-digital-signature
+
+
 
 ### 6. Event Handling
+This section implements event handlers to distinguish between signature and initial field interactions, enabling different behaviors based on the field type clicked.
 
-```javascript
-class PDFEventHandlers {
-  static setupAnnotationHandlers(instance) {
-    // Handle annotation creation for custom rendering
-    instance.addEventListener("annotations.create", (annotations) => {
-      annotations.forEach(annotation => {
-        if (annotation.isSignature) {
-          this.updateCustomRenderer(annotation);
-        }
-      });
-    });
-    
-    // Handle annotation deletion
-    instance.addEventListener("annotations.delete", (annotations) => {
-      annotations.forEach(annotation => {
-        if (annotation.isSignature) {
-          this.cleanupCustomRenderer(annotation);
-        }
-      });
-    });
-    
-    // Handle signature interactions
-    instance.addEventListener("annotations.press", (annotation) => {
-      if (annotation.customData?.type === "signature") {
-        globalLastClickedAnnotationType = 'signature';
-      } else if (annotation.customData?.type === "initial") {
-        globalLastClickedAnnotationType = 'initial';
-      }
-    });
+```javascript    
+// Handle signature interactions
+instance.addEventListener("annotations.press", (annotation) => {
+  if (annotation.customData?.type === "signature") {
+    globalLastClickedAnnotationType = 'signature';
+  } else if (annotation.customData?.type === "initial") {
+    globalLastClickedAnnotationType = 'initial';
   }
-  
-  static updateCustomRenderer(annotation) {
-    // Update visual representation after signing
-    const renderer = getCustomSignatureRenderer(annotation);
-    if (renderer?.node) {
-      renderer.node.className = "signed-field";
-    }
-  }
-}
+});
 ```
+
+#### Relevant Guides
+- https://www.nutrient.io/guides/web/annotations/custom-data-in-annotations/
+- https://www.nutrient.io/api/web/NutrientViewer.AnnotationsPressEvent.html
 
 ### 7. File Upload & Management
 
