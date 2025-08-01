@@ -408,7 +408,8 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
     const container = containerRef.current;
     let PSPDFKit: any;
     (async function () {
-      PSPDFKit = await import("@nutrient-sdk/viewer");
+      //@ts-ignore
+      PSPDFKit = window.NutrientViewer;
       setPSPDFKit(PSPDFKit);
       if (container) {
         if (PSPDFKit) {
@@ -458,7 +459,7 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           },
           container,
           document: pdfUrl,
-          baseUrl: `${window.location.protocol}//${window.location.host}/nutrient-viewer/`,
+          // baseUrl: `${window.location.protocol}//${window.location.host}/nutrient-viewer/`,
           toolbarItems: TOOLBAR_ITEMS,
           disableTextSelection: true,
           customRenderers: {
