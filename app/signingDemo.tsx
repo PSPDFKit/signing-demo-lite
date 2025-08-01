@@ -172,7 +172,8 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           signerColor: signee.color,
           isInitial: annotationType === AnnotationTypeEnum.INITIAL,
         },
-        //backgroundColor: signee.color,
+        backgroundColor: PSPDFKit.Color.TRANSPARENT,
+        borderWidth: 0
       });
       const formField = new PSPDFKit.FormFields.SignatureFormField({
         annotationIds: PSPDFKit.Immutable.List([widget.id]),
@@ -197,7 +198,8 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           signerColor: PSPDFKit.Color.WHITE,
           isInitial: false,
         },
-        //backgroundColor: signee.color,
+        backgroundColor: PSPDFKit.Color.TRANSPARENT,
+        borderWidth: 0
       });
       const formField = new PSPDFKit.FormFields.SignatureFormField({
         annotationIds: PSPDFKit.Immutable.List([widget.id]),
