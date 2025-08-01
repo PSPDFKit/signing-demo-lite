@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "copyPSPDF": "cp -R ./node_modules/pspdfkit/dist/pspdfkit-lib public/pspdfkit-lib",
+    "dev": "npm run copyPSPDF && next dev",
+    "copyPSPDF": "cp -R ./node_modules/@nutrient-sdk/viewer/dist/ public/nutrient-viewer",
     "build": "npm run copyPSPDF && next build",
     "start": "next start",
     "lint": "next lint"
