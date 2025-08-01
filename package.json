@@ -16,7 +16,7 @@
     "axios": "^1.7.3",
     "form-data": "^4.0.0",
     "next": "14.1.4",
-    "pspdfkit": "^2024.3.0",
+    "@nutrient-sdk/viewer": "^1.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
