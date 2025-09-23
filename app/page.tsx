@@ -55,7 +55,8 @@ const App: React.FC = () => {
   useEffect(() => {
     var PSPDFKit: any;
     (async function () {
-      PSPDFKit = await import("pspdfkit");
+      //@ts-ignore
+      PSPDFKit = window.NutrientViewer;
       allUsers.forEach((user: any) => {
         user.color = PSPDFKit.Color.LIGHT_BLUE;
       });

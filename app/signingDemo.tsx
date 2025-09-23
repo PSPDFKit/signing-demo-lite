@@ -172,7 +172,8 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           signerColor: signee.color,
           isInitial: annotationType === AnnotationTypeEnum.INITIAL,
         },
-        //backgroundColor: signee.color,
+        backgroundColor: PSPDFKit.Color.TRANSPARENT,
+        borderWidth: 0
       });
       const formField = new PSPDFKit.FormFields.SignatureFormField({
         annotationIds: PSPDFKit.Immutable.List([widget.id]),
@@ -197,7 +198,8 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           signerColor: PSPDFKit.Color.WHITE,
           isInitial: false,
         },
-        //backgroundColor: signee.color,
+        backgroundColor: PSPDFKit.Color.TRANSPARENT,
+        borderWidth: 0
       });
       const formField = new PSPDFKit.FormFields.SignatureFormField({
         annotationIds: PSPDFKit.Immutable.List([widget.id]),
@@ -408,7 +410,8 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
     const container = containerRef.current;
     let PSPDFKit: any;
     (async function () {
-      PSPDFKit = await import("pspdfkit");
+      //@ts-ignore
+      PSPDFKit = window.NutrientViewer;
       setPSPDFKit(PSPDFKit);
       if (container) {
         if (PSPDFKit) {
@@ -458,7 +461,7 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           },
           container,
           document: pdfUrl,
-          baseUrl: `${window.location.protocol}//${window.location.host}/`,
+          // baseUrl: `${window.location.protocol}//${window.location.host}/nutrient-viewer/`,
           toolbarItems: TOOLBAR_ITEMS,
           disableTextSelection: true,
           customRenderers: {

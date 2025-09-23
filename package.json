@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "copyPSPDF": "cp -R ./node_modules/pspdfkit/dist/pspdfkit-lib public/pspdfkit-lib",
-    "build": "npm run copyPSPDF && next build",
+    "copyPSPDF": "cp -R ./node_modules/@nutrient-sdk/viewer/dist/ public/nutrient-viewer",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -16,7 +16,6 @@
     "axios": "^1.7.3",
     "form-data": "^4.0.0",
     "next": "14.1.4",
-    "pspdfkit": "^2024.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

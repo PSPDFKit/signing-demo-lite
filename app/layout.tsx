@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ImageComponent from "next/image";
 import logo from "@/public/Nutrient_Logo.png";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -99,6 +100,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.5.0/nutrient-viewer.js"
+          // Load before the page becomes interactive to reference window.NutrientViewer in the client
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
       className={SFProText.variable+" "+SFProDisplay.variable}
       >
