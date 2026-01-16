@@ -420,7 +420,33 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
         const {
           UI: { createBlock, Recipes, Interfaces, Core },
         } = PSPDFKit;
-        PSPDFKit.load({
+
+        // Try to fetch trusted CAs
+        let trustedCAsCallback;
+        try {
+          const response = await fetch('/api/digitalSigningLite', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            const apiRes = await response.json();
+            // Only set the callback if fetch succeeded
+            trustedCAsCallback = async () => {
+              let arrayBuffer: String[] = [];
+              apiRes.data.data.ca_certificates.forEach((cert: string) => {
+                arrayBuffer.push(atob(cert));
+              });
+              return [...arrayBuffer];
+            };
+          }
+        } catch (e) {
+          console.log('Failed to fetch trusted CAs, continuing without them:', e);
+        }
+
+        const config: any = {
           licenseKey: process.env.NEXT_PUBLIC_LICENSE_KEY as string,
           // @ts-ignore
           ui: {
@@ -465,7 +491,7 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           toolbarItems: TOOLBAR_ITEMS,
           disableTextSelection: true,
           customRenderers: {
-            Annotation:  ({ annotation }: any) =>{  
+            Annotation:  ({ annotation }: any) =>{
               if(digitallySigned && annotation.customData?.type === AnnotationTypeEnum.DS){
                 const isFieldSigned = digitallySigned.signatures.find((sign: any) => sign.signatureFormFQN === annotation.formFieldName);
                 const ele = document.createElement('div');
@@ -478,27 +504,14 @@ const SignDemo: React.FC<{ allUsers: User[]; user: User }> = ({
           isEditableAnnotation: function (annotation:any) {
             return !annotation.isSignature;
           },
-          trustedCAsCallback: async () => {
-            let arrayBuffer : String[]= [];
-            try {
-              const response = await fetch('/api/digitalSigningLite', {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              });
-              
-              const apiRes = await response.json();
-              console.log(apiRes);
-              apiRes.data.data.ca_certificates.forEach((cert:string)=>{
-                arrayBuffer.push(atob(cert));
-              })
-            } catch (e) {
-              throw `Error ${e}`;
-            }
-            return [...arrayBuffer];
-          }
-        }).then(async function (inst: any) {
+        };
+
+        // Only include trustedCAsCallback if fetch succeeded
+        if (trustedCAsCallback) {
+          config.trustedCAsCallback = trustedCAsCallback;
+        }
+
+        PSPDFKit.load(config).then(async function (inst: any) {
           trackInst = inst;
           setInstance(inst);
 
